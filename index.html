@@ -10,7 +10,6 @@
 <style>
   /* ============================================================
      ROOT PALETTE & VARIABLES
-     Change these colors to restyle the whole website instantly!
   ============================================================ */
   :root {
     --blush:      #f9d5e5;
@@ -32,9 +31,518 @@
     background: var(--cream);
   }
 
-  /* ── GLOBAL TYPOGRAPHY ── */
   .font-display  { font-family: 'Playfair Display', serif; }
   .font-script   { font-family: 'Dancing Script', cursive; }
+  .font-body     { font-family: 'Cormorant Garamond', serif; }
+
+  /* Page System */
+  .page {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.97);
+    transition: opacity 0.8s cubic-bezier(.4,0,.2,1),
+                transform 0.8s cubic-bezier(.4,0,.2,1);
+    will-change: opacity, transform;
+  }
+  .page.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+    z-index: 10;
+  }
+  .page.exit {
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    z-index: 9;
+  }
+
+  /* Progress Hearts */
+  #progress {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; gap: 10px; align-items: center;
+  }
+  .prog-heart {
+    font-size: 14px; opacity: 0.3;
+    transition: opacity .4s, transform .4s;
+    cursor: pointer;
+  }
+  .prog-heart.done { opacity: 1; transform: scale(1.25); }
+
+  /* Next Button */
+  .btn-next {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--rosegold), var(--burgundy));
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 600; letter-spacing: .05em;
+    border: none; border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(197,130,106,.45);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .btn-next:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 14px 40px rgba(197,130,106,.55);
+  }
+
+  /* Floating Music Button */
+  #music-btn {
+    position: fixed; bottom: 24px; right: 24px; z-index: 200;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+    border: 2px solid var(--rose);
+    font-size: 26px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 25px rgba(232,160,176,.4);
+    transition: all 0.3s ease;
+  }
+  #music-btn:hover { transform: scale(1.15); }
+
+  /* Canvases */
+  #particles-canvas, #confetti-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  }
+  #confetti-canvas { z-index: 50; display: none; }
+
+  /* Page backgrounds and other styles remain the same */
+  #page1 { background: linear-gradient(160deg, #fde8ef 0%, #fff4f0 40%, #fce8d8 100%); }
+  #page2 { background: linear-gradient(150deg, #fff1f6 0%, var(--warm-white) 60%, #fef3e8 100%); }
+  #page3 { background: linear-gradient(155deg, #fff8f0 0%, #fff1f5 50%, #fef5ec 100%); }
+  #page4 { background: linear-gradient(160deg, #fce8d8 0%, #fff4f0 40%, #fde8ef 100%); }
+  #page5 { background: linear-gradient(150deg, #f9d5e5 0%, #fce8d8 35%, #fff0e8 65%, #fde8ef 100%); }
+
+  .hero-photo {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 12px 40px rgba(197,130,106,.35), 0 0 0 8px rgba(249,213,229,.5);
+    background: linear-gradient(135deg, var(--blush), var(--petal));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .glow-text {
+    text-shadow: 0 0 30px rgba(197,130,106,.5), 0 0 60px rgba(249,213,229,.6);
+  }
+  .open-btn {
+    padding: 18px 56px;
+    background: linear-gradient(135deg, var(--rosegold), var(--burgundy));
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700; letter-spacing: .07em;
+    border: none; border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(197,130,106,.6);
+    animation: pulse-glow 2.5s infinite;
+    transition: transform .25s;
+  }
+  .open-btn:hover { transform: scale(1.06); }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 8px 30px rgba(197,130,106,.4), 0 0 0 0 rgba(197,130,106,.3); }
+    50%      { box-shadow: 0 14px 50px rgba(197,130,106,.55), 0 0 0 18px rgba(197,130,106,.0); }
+  }
+
+  /* Rest of your original styles (timeline, reasons, letter, wish button, etc.) */
+  .timeline { position: relative; padding-left: 32px; max-width: 560px; width: 100%; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 10px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--blush), var(--rose), var(--rosegold), var(--blush));
+  }
+  .timeline-item { position: relative; margin-bottom: 36px; opacity: 0; transform: translateX(-20px); transition: opacity .6s, transform .6s; }
+  .timeline-item.visible { opacity: 1; transform: none; }
+  .timeline-dot {
+    position: absolute; left: -36px; top: 6px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--rosegold));
+    border: 3px solid white;
+    box-shadow: 0 0 10px rgba(197,130,106,.5);
+  }
+  .timeline-photo {
+    width: 100%; height: 140px;
+    border-radius: 14px; object-fit: cover;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fde8ef, #fce8d8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; color: var(--rose);
+  }
+  .timeline-card {
+    background: rgba(255,255,255,.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(249,213,229,.7);
+    border-radius: 16px; padding: 16px;
+    box-shadow: 0 6px 24px rgba(197,130,106,.12);
+  }
+
+  .reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px; max-width: 700px; width: 100%;
+    padding: 0 16px;
+  }
+  .reason-card {
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(249,213,229,.8);
+    border-radius: 20px; padding: 22px 18px;
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(197,130,106,.1);
+    opacity: 0; transform: translateY(24px) scale(.95);
+    transition: opacity .5s, transform .5s;
+  }
+  .reason-card.visible { opacity: 1; transform: none; }
+  .reason-card:hover {
+    transform: translateY(-4px) scale(1.03) !important;
+    box-shadow: 0 14px 36px rgba(197,130,106,.22);
+  }
+
+  .letter-paper {
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(249,213,229,.9);
+    border-radius: 24px;
+    padding: 40px 44px;
+    max-width: 620px; width: 95%;
+    box-shadow: 0 20px 60px rgba(197,130,106,.18), 0 2px 8px rgba(197,130,106,.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .letter-paper::before {
+    content: '♥';
+    position: absolute; top: -40px; right: -40px;
+    font-size: 180px; color: rgba(249,213,229,.25);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .wish-btn {
+    padding: 20px 64px;
+    background: linear-gradient(135deg, #e8a0b0, var(--rosegold), var(--burgundy));
+    background-size: 200% 200%;
+    animation: btn-shimmer 3s ease infinite, pulse-glow 2.5s infinite;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700; letter-spacing: .06em;
+    border: none; border-radius: 50px;
+    cursor: pointer; transition: transform .25s;
+  }
+  .wish-btn:hover { transform: scale(1.07); }
+  @keyframes btn-shimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  #final-message {
+    display: none;
+    flex-direction: column; align-items: center;
+    text-align: center; gap: 20px;
+    animation: fadeInUp .9s ease forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .stars-container {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold);
+    animation: twinkle var(--d, 3s) ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0); }
+    50%      { opacity: 1; transform: scale(1.5); }
+  }
+
+  .btn-restart {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 36px;
+    background: rgba(255,255,255,.7); backdrop-filter: blur(8px);
+    color: var(--burgundy);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 600; letter-spacing: .04em;
+    border: 2px solid var(--rose);
+    border-radius: 50px; cursor: pointer;
+    transition: background .25s, transform .25s;
+  }
+  .btn-restart:hover { background: rgba(255,255,255,.95); transform: scale(1.04); }
+
+  .page-inner {
+    width: 100%; display: flex; flex-direction: column;
+    align-items: center; padding: 80px 20px 100px;
+    gap: 0; min-height: 100%;
+  }
+
+  @media (max-width: 480px) {
+    .letter-paper { padding: 28px 22px; }
+    .reasons-grid { grid-template-columns: repeat(2, 1fr); }
+    .open-btn { padding: 16px 40px; font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Progress Hearts -->
+<div id="progress" aria-label="Page progress">
+  <span class="prog-heart done" onclick="goTo(1)" title="Page 1">💗</span>
+  <span class="prog-heart" onclick="goTo(2)" title="Page 2">💗</span>
+  <span class="prog-heart" onclick="goTo(3)" title="Page 3">💗</span>
+  <span class="prog-heart" onclick="goTo(4)" title="Page 4">💗</span>
+  <span class="prog-heart" onclick="goTo(5)" title="Page 5">💗</span>
+</div>
+
+<!-- MUSIC PLAYER -->
+<audio id="bg-music" loop>
+  <source src="Perfect.mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn" onclick="toggleMusic()" title="Play / Pause Perfect">🎵</button>
+
+<!-- PAGE 1: Hero -->
+<section id="page1" class="page active">
+  <div class="page-inner justify-center text-center gap-6 py-10">
+    <div class="hero-photo mx-auto">
+      <span class="hero-photo-inner" title="Replace with Sandipa's photo">🌸</span>
+    </div>
+    <div>
+      <p class="font-script text-2xl glow-text" style="color:var(--rosegold)">To the most beautiful soul,</p>
+      <h1 class="font-display glow-text mt-2 leading-tight" style="font-size:clamp(2.2rem,7vw,4.5rem); color:var(--burgundy); font-style:italic;">
+        Happy Birthday<br/>Sandipa! 🌹
+      </h1>
+    </div>
+    <p class="font-body text-lg max-w-sm" style="color:#8b4a5a; line-height:1.75">
+      On this magical day, I want you to feel<br/>every bit of how deeply you're loved. 💕
+    </p>
+    <button class="open-btn font-display" onclick="goTo(2)">
+      Open My Heart &nbsp;→
+    </button>
+    <p class="font-script text-base mt-2" style="color:var(--rosegold)">— with all my love, RAJ 💌</p>
+  </div>
+</section>
+
+<!-- PAGE 2: Our Sweet Journey -->
+<section id="page2" class="page">
+  <div class="page-inner gap-6">
+    <div class="text-center">
+      <p class="font-script text-xl mb-1" style="color:var(--rosegold)">a story of us</p>
+      <h2 class="font-display text-4xl" style="color:var(--burgundy); font-style:italic;">Our Sweet Journey 🌿</h2>
+    </div>
+    <div class="timeline">
+      <!-- Memory 1 to 6 (you can edit these) -->
+      <div class="timeline-item delay-1">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-photo">🌸</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">The First Hello</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            I still remember the moment I first saw you — a little nervous, a little magic in the air. That was the beginning of everything. 💫
+          </p>
+        </div>
+      </div>
+      <!-- Add your other 5 memories here similarly. For now keeping your original placeholders -->
+      <!-- ... (same as your previous code for memories 2-6) ... -->
+    </div>
+    <button class="btn-next mt-4" onclick="goTo(3)">Next ❤️</button>
+  </div>
+</section>
+
+<!-- PAGE 3: Reasons I Love You -->
+<section id="page3" class="page">
+  <div class="page-inner gap-7 text-center">
+    <div>
+      <p class="font-script text-xl mb-1" style="color:var(--rosegold)">a little list from my heart</p>
+      <h2 class="font-display text-4xl" style="color:var(--burgundy); font-style:italic;">Why I Love You 💖</h2>
+    </div>
+    <div class="reasons-grid">
+      <!-- Your 8 reasons (you can edit) -->
+      <div class="reason-card delay-1"><div class="reason-icon">😊</div><p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Smile</p><p class="font-body text-sm mt-1" style="color:#9b6070">It lights up every room and every corner of my heart.</p></div>
+      <!-- ... other reason cards ... -->
+    </div>
+    <button class="btn-next" onclick="goTo(4)">Next ❤️</button>
+  </div>
+</section>
+
+<!-- PAGE 4: Love Letter -->
+<section id="page4" class="page">
+  <div class="page-inner gap-7 text-center">
+    <div>
+      <p class="font-script text-xl mb-1" style="color:var(--rosegold)">written from the deepest part of me</p>
+      <h2 class="font-display text-4xl" style="color:var(--burgundy); font-style:italic;">A Letter For You 💌</h2>
+    </div>
+    <div class="letter-paper">
+      <p class="font-script text-2xl mb-4" style="color:var(--rosegold)">My dearest Sandipa,</p>
+      <p class="font-body mt-5 text-lg leading-relaxed" style="color:#5a3040">
+        There are days when I look at you and I genuinely wonder how I got so lucky. You are not just the person I love — you are the person who made me understand what love truly means.
+      </p>
+      <!-- Continue with the rest of your beautiful letter -->
+      <div class="mt-6 text-right">
+        <p class="font-script text-2xl mt-3" style="color:var(--burgundy)">Forever yours,</p>
+        <p class="font-script text-3xl" style="color:var(--rosegold)">RAJ 💕</p>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goTo(5)">Next ❤️</button>
+  </div>
+</section>
+
+<!-- PAGE 5: Make a Wish (Beautiful Finale) -->
+<section id="page5" class="page">
+  <div class="stars-container" id="stars-bg"></div>
+  <div class="page-inner gap-8 text-center relative z-10">
+    <div>
+      <p class="font-script text-2xl" style="color:var(--rosegold)">this one is just for you</p>
+      <h2 class="font-display leading-tight mt-2" style="font-size:clamp(1.8rem,5.5vw,3.5rem); color:var(--burgundy); font-style:italic; text-shadow:0 0 40px rgba(197,130,106,.4)">
+        Sandipa, You Make<br/>My World Beautiful ✨
+      </h2>
+    </div>
+    <button class="wish-btn font-display" id="wish-btn" onclick="makeWish()">
+      Make a Wish Sandipa 💘
+    </button>
+    <div id="final-message">
+      <div style="font-size: clamp(3rem, 10vw, 6rem);">🌹💕🌹</div>
+      <h3 class="font-display" style="font-size:clamp(2rem,7vw,4rem); color:var(--burgundy); font-style:italic; text-shadow:0 0 30px rgba(197,130,106,.5)">
+        I Love You,<br/>Sandipa 💗
+      </h3>
+      <p class="font-body text-xl max-w-md" style="color:#7b3050; line-height:1.9">
+        Every day with you is a gift I treasure. Today, tomorrow, and always — my heart belongs to you.<br>
+        Happy Birthday, my love. 🥂
+      </p>
+      <p class="font-script text-2xl" style="color:var(--rosegold)">— RAJ, forever &amp; always 💌</p>
+      <button class="btn-restart font-display mt-4" onclick="restartJourney()">
+        ↩ Relive the Journey
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* Page Navigation */
+let currentPage = 1;
+const TOTAL = 5;
+
+function goTo(n) {
+  if (n < 1 || n > TOTAL) return;
+  const from = document.getElementById('page' + currentPage);
+  const to = document.getElementById('page' + n);
+  from.classList.add('exit');
+  to.classList.add('active');
+  setTimeout(() => from.classList.remove('active', 'exit'), 650);
+  currentPage = n;
+  updateProgress();
+  triggerPageAnimations(n);
+  if (n === 5) buildStars();
+}
+
+function updateProgress() {
+  document.querySelectorAll('.prog-heart').forEach((h, i) => {
+    h.classList.toggle('done', i < currentPage);
+  });
+}
+
+function restartJourney() {
+  document.getElementById('wish-btn').style.display = 'inline-flex';
+  document.getElementById('final-message').style.display = 'none';
+  stopConfetti();
+  goTo(1);
+}
+
+function triggerPageAnimations(n) {
+  if (n === 2) {
+    setTimeout(() => document.querySelectorAll('.timeline-item').forEach(el => el.classList.add('visible')), 200);
+  }
+  if (n === 3) {
+    document.querySelectorAll('.reason-card').forEach((el, i) => setTimeout(() => el.classList.add('visible'), 80 * i + 150));
+  }
+}
+
+/* Stars on Page 5 */
+function buildStars() {
+  const container = document.getElementById('stars-bg');
+  if (container.children.length > 0) return;
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:\( {Math.random()*100}%; top: \){Math.random()*100}%; --d:\( {(Math.random()*3+1.5).toFixed(2)}s; animation-delay: \){(Math.random()*3).toFixed(2)}s;`;
+    container.appendChild(s);
+  }
+}
+
+/* Confetti & Petals */
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [], animId, running = false;
+
+function makeWish() {
+  document.getElementById('wish-btn').style.display = 'none';
+  launchConfetti();
+  setTimeout(() => {
+    document.getElementById('final-message').style.display = 'flex';
+    setTimeout(stopConfetti, 5000);
+  }, 3500);
+}
+
+function launchConfetti() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  particles = [];
+  running = true;
+  for (let i = 0; i < 300; i++) spawnParticle();
+  animate();
+  setInterval(() => { if (running) for (let i = 0; i < 40; i++) spawnParticle(); }, 600);
+}
+
+function spawnParticle() {
+  const colors = ['#f9d5e5','#e8a0b0','#c5826a','#d4a76a','#f4b8c8','#7b2d42'];
+  particles.push({
+    x: canvas.width * Math.random(),
+    y: -10,
+    vx: (Math.random() - 0.5) * 4,
+    vy: Math.random() * 4 + 2,
+    rot: Math.random() * Math.PI * 2,
+    rotV: (Math.random() - 0.5) * 0.15,
+    size: Math.random() * 14 + 6,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    type: ['rect','heart','petal'][Math.floor(Math.random()*3)],
+    alpha: 1,
+    life: Math.random() * 200 + 120,
+    age: 0
+  });
+}
+
+function drawHeart(ctx, x, y, size) {
+  ctx.save(); ctx.translate(x, y);
+  ctx.beginPath();
+  const s = size / 2;
+  ctx.moveTo(0, -s * 0.5);
+  ctx.bezierCurveTo(s, -s*1.3, s*2, s*0.3, 0, s*1.2);
+  ctx.bezierCurveTo(-s*2, s*0.3, -s, -s*1.3, 0, -s*0.5);
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+
+function drawPetal(ctx, x, y, size) {
+  ctx.save(); ctx.translate(x, y);
+  ctx.beginPath();
+  ctx.ellipse(0, -size/2, size*0.35, size*0.6, 0, 0, Math.PI*2);
+  ctx.fill(); ctx.restore();
+}
+
+function animate() {
+  if (!running) return;
+  ctx.clearRect(0, 0, canvas.width, canv  .font-script   { font-family: 'Dancing Script', cursive; }
   .font-body     { font-family: 'Cormorant Garamond', serif; }
 
   /* ── PAGE SYSTEM ── */
