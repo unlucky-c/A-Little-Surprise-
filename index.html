@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday Sandipa 💕</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     ROOT PALETTE & VARIABLES
+     Change these colors to restyle the whole website instantly!
+  ============================================================ */
+  :root {
+    --blush:      #f9d5e5;
+    --rose:       #e8a0b0;
+    --rosegold:   #c5826a;
+    --cream:      #fff8f3;
+    --burgundy:   #7b2d42;
+    --warm-white: #fdf6ee;
+    --petal:      #f4b8c8;
+    --gold:       #d4a76a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+  }
+
+  /* ── GLOBAL TYPOGRAPHY ── */
+  .font-display  { font-family: 'Playfair Display', serif; }
+  .font-script   { font-family: 'Dancing Script', cursive; }
+  .font-body     { font-family: 'Cormorant Garamond', serif; }
+
+  /* ── PAGE SYSTEM ── */
+  .page {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.97);
+    transition: opacity 0.8s cubic-bezier(.4,0,.2,1),
+                transform 0.8s cubic-bezier(.4,0,.2,1);
+    will-change: opacity, transform;
+  }
+  .page.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+    z-index: 10;
+  }
+  .page.exit {
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    z-index: 9;
+  }
+
+  /* ── PROGRESS HEARTS ── */
+  #progress {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; gap: 10px; align-items: center;
+  }
+  .prog-heart {
+    font-size: 14px; opacity: 0.3;
+    transition: opacity .4s, transform .4s;
+    cursor: pointer;
+  }
+  .prog-heart.done { opacity: 1; transform: scale(1.25); }
+
+  /* ── NEXT BUTTON ── */
+  .btn-next {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--rosegold), var(--burgundy));
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 600; letter-spacing: .05em;
+    border: none; border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(197,130,106,.45);
+    transition: transform .25s, box-shadow .25s;
+    text-decoration: none;
+  }
+  .btn-next:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 14px 40px rgba(197,130,106,.55);
+  }
+
+  /* ── MUSIC TOGGLE ── */
+  #music-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 200;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,.7); backdrop-filter: blur(8px);
+    border: 1.5px solid var(--rose);
+    font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .25s;
+    box-shadow: 0 4px 16px rgba(232,160,176,.3);
+  }
+  #music-btn:hover { transform: scale(1.12); }
+
+  /* ── FLOATING PARTICLES CANVAS ── */
+  #particles-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  }
+
+  /* ── CONFETTI CANVAS (page 5) ── */
+  #confetti-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    display: none;
+  }
+
+  /* ============================================================
+     PAGE 1 — HERO
+  ============================================================ */
+  #page1 {
+    background: linear-gradient(160deg, #fde8ef 0%, #fff4f0 40%, #fce8d8 100%);
+  }
+  .hero-photo {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 12px 40px rgba(197,130,106,.35), 0 0 0 8px rgba(249,213,229,.5);
+    /* ── REPLACE SRC with your photo URL ── */
+    background: linear-gradient(135deg, var(--blush), var(--petal));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-photo-inner {
+    font-size: 60px; /* Shows when no real image is set */
+  }
+  .glow-text {
+    text-shadow: 0 0 30px rgba(197,130,106,.5), 0 0 60px rgba(249,213,229,.6);
+  }
+  .open-btn {
+    padding: 18px 56px;
+    background: linear-gradient(135deg, var(--rosegold), var(--burgundy));
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700; letter-spacing: .07em;
+    border: none; border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(197,130,106,.6);
+    animation: pulse-glow 2.5s infinite;
+    transition: transform .25s;
+  }
+  .open-btn:hover { transform: scale(1.06); }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 8px 30px rgba(197,130,106,.4), 0 0 0 0 rgba(197,130,106,.3); }
+    50%      { box-shadow: 0 14px 50px rgba(197,130,106,.55), 0 0 0 18px rgba(197,130,106,.0); }
+  }
+
+  /* ============================================================
+     PAGE 2 — TIMELINE
+  ============================================================ */
+  #page2 {
+    background: linear-gradient(150deg, #fff1f6 0%, var(--warm-white) 60%, #fef3e8 100%);
+  }
+  .timeline { position: relative; padding-left: 32px; max-width: 560px; width: 100%; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 10px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--blush), var(--rose), var(--rosegold), var(--blush));
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 36px;
+    opacity: 0; transform: translateX(-20px);
+    transition: opacity .6s, transform .6s;
+  }
+  .timeline-item.visible { opacity: 1; transform: none; }
+  .timeline-dot {
+    position: absolute; left: -36px; top: 6px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--rosegold));
+    border: 3px solid white;
+    box-shadow: 0 0 10px rgba(197,130,106,.5);
+  }
+  .timeline-photo {
+    width: 100%; height: 140px;
+    border-radius: 14px; object-fit: cover;
+    margin-bottom: 10px;
+    /* ── REPLACE BACKGROUND with your memory photo ── */
+    background: linear-gradient(135deg, #fde8ef, #fce8d8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; color: var(--rose);
+  }
+  .timeline-card {
+    background: rgba(255,255,255,.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(249,213,229,.7);
+    border-radius: 16px; padding: 16px;
+    box-shadow: 0 6px 24px rgba(197,130,106,.12);
+  }
+
+  /* ============================================================
+     PAGE 3 — LOVE REASONS
+  ============================================================ */
+  #page3 {
+    background: linear-gradient(155deg, #fff8f0 0%, #fff1f5 50%, #fef5ec 100%);
+  }
+  .reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px; max-width: 700px; width: 100%;
+    padding: 0 16px;
+  }
+  .reason-card {
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(249,213,229,.8);
+    border-radius: 20px; padding: 22px 18px;
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(197,130,106,.1);
+    opacity: 0; transform: translateY(24px) scale(.95);
+    transition: opacity .5s, transform .5s;
+  }
+  .reason-card.visible { opacity: 1; transform: none; }
+  .reason-card:hover {
+    transform: translateY(-4px) scale(1.03) !important;
+    box-shadow: 0 14px 36px rgba(197,130,106,.22);
+  }
+  .reason-icon { font-size: 36px; margin-bottom: 10px; }
+
+  /* ============================================================
+     PAGE 4 — LOVE LETTER
+  ============================================================ */
+  #page4 {
+    background: linear-gradient(160deg, #fce8d8 0%, #fff4f0 40%, #fde8ef 100%);
+  }
+  .letter-paper {
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(249,213,229,.9);
+    border-radius: 24px;
+    padding: 40px 44px;
+    max-width: 620px; width: 95%;
+    box-shadow: 0 20px 60px rgba(197,130,106,.18), 0 2px 8px rgba(197,130,106,.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .letter-paper::before {
+    content: '♥';
+    position: absolute; top: -40px; right: -40px;
+    font-size: 180px; color: rgba(249,213,229,.25);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .letter-line {
+    border: none; border-bottom: 1px dashed rgba(232,160,176,.4);
+    margin: 10px 0;
+  }
+
+  /* ============================================================
+     PAGE 5 — MAKE A WISH
+  ============================================================ */
+  #page5 {
+    background: linear-gradient(150deg, #f9d5e5 0%, #fce8d8 35%, #fff0e8 65%, #fde8ef 100%);
+  }
+  .wish-btn {
+    padding: 20px 64px;
+    background: linear-gradient(135deg, #e8a0b0, var(--rosegold), var(--burgundy));
+    background-size: 200% 200%;
+    animation: btn-shimmer 3s ease infinite, pulse-glow 2.5s infinite;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700; letter-spacing: .06em;
+    border: none; border-radius: 50px;
+    cursor: pointer; transition: transform .25s;
+  }
+  .wish-btn:hover { transform: scale(1.07); }
+  @keyframes btn-shimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  #final-message {
+    display: none;
+    flex-direction: column; align-items: center;
+    text-align: center; gap: 20px;
+    animation: fadeInUp .9s ease forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .stars-container {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold);
+    animation: twinkle var(--d, 3s) ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0); }
+    50%      { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* ── RESTART BTN ── */
+  .btn-restart {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 36px;
+    background: rgba(255,255,255,.7); backdrop-filter: blur(8px);
+    color: var(--burgundy);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 600; letter-spacing: .04em;
+    border: 2px solid var(--rose);
+    border-radius: 50px; cursor: pointer;
+    transition: background .25s, transform .25s;
+  }
+  .btn-restart:hover { background: rgba(255,255,255,.95); transform: scale(1.04); }
+
+  /* ── SCROLL INNER ── */
+  .page-inner {
+    width: 100%; display: flex; flex-direction: column;
+    align-items: center; padding: 80px 20px 100px;
+    gap: 0; min-height: 100%;
+  }
+
+  /* ── DELAY HELPERS ── */
+  .delay-1 { transition-delay: .1s !important; }
+  .delay-2 { transition-delay: .2s !important; }
+  .delay-3 { transition-delay: .3s !important; }
+  .delay-4 { transition-delay: .4s !important; }
+  .delay-5 { transition-delay: .5s !important; }
+  .delay-6 { transition-delay: .6s !important; }
+  .delay-7 { transition-delay: .7s !important; }
+  .delay-8 { transition-delay: .8s !important; }
+  .delay-9 { transition-delay: .9s !important; }
+  .delay-10 { transition-delay: 1.0s !important; }
+
+  /* ── MOBILE ADJUSTMENTS ── */
+  @media (max-width: 480px) {
+    .letter-paper { padding: 28px 22px; }
+    .reasons-grid { grid-template-columns: repeat(2, 1fr); }
+    .open-btn { padding: 16px 40px; font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  FLOATING PARTICLES CANVAS (all pages)           ║
+     ╚══════════════════════════════════════════════════╝ -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  CONFETTI / PETAL CANVAS (page 5 only)           ║
+     ╚══════════════════════════════════════════════════╝ -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- PROGRESS HEARTS -->
+<div id="progress" aria-label="Page progress">
+  <span class="prog-heart done" onclick="goTo(1)" title="Page 1">💗</span>
+  <span class="prog-heart"     onclick="goTo(2)" title="Page 2">💗</span>
+  <span class="prog-heart"     onclick="goTo(3)" title="Page 3">💗</span>
+  <span class="prog-heart"     onclick="goTo(4)" title="Page 4">💗</span>
+  <span class="prog-heart"     onclick="goTo(5)" title="Page 5">💗</span>
+</div>
+
+<!-- MUSIC TOGGLE -->
+<!-- 🎵 Add a romantic audio file by setting the src below -->
+<audio id="bg-music" loop>
+  <source src="" type="audio/mpeg" />
+  <!-- Example: <source src="romantic-song.mp3" type="audio/mpeg" /> -->
+</audio>
+<button id="music-btn" onclick="toggleMusic()" title="Toggle music">🎵</button>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  PAGE 1 · HERO                                   ║
+     ╚══════════════════════════════════════════════════╝ -->
+<section id="page1" class="page active" aria-label="Hero page">
+  <div class="page-inner justify-center text-center gap-6 py-10">
+
+    <!-- 📸 PHOTO PLACEHOLDER — replace the emoji with an <img> tag when you have a photo:
+         <img src="sandipa.jpg" alt="Sandipa" class="hero-photo" style="display:block;" /> -->
+    <div class="hero-photo mx-auto">
+      <span class="hero-photo-inner" title="Replace with Sandipa's photo">🌸</span>
+    </div>
+
+    <div>
+      <p class="font-script text-2xl glow-text" style="color:var(--rosegold)">To the most beautiful soul,</p>
+      <h1 class="font-display glow-text mt-2 leading-tight"
+          style="font-size:clamp(2.2rem,7vw,4.5rem); color:var(--burgundy); font-style:italic;">
+        Happy Birthday<br/>Sandipa! 🌹
+      </h1>
+    </div>
+
+    <p class="font-body text-lg max-w-sm" style="color:#8b4a5a; line-height:1.75">
+      On this magical day, I want you to feel<br/>every bit of how deeply you're loved. 💕
+    </p>
+
+    <button class="open-btn font-display" onclick="goTo(2)">
+      Open My Heart &nbsp;→
+    </button>
+
+    <p class="font-script text-base mt-2" style="color:var(--rosegold)">— with all my love, RAJ 💌</p>
+
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  PAGE 2 · OUR SWEET JOURNEY (Timeline)           ║
+     ╚══════════════════════════════════════════════════╝ -->
+<section id="page2" class="page" aria-label="Our journey">
+  <div class="page-inner gap-6">
+
+    <div class="text-center">
+      <p class="font-script text-xl mb-1" style="color:var(--rosegold)">a story of us</p>
+      <h2 class="font-display text-4xl" style="color:var(--burgundy); font-style:italic;">Our Sweet Journey 🌿</h2>
+    </div>
+
+    <!-- TIMELINE — edit captions & dates to match your real memories! -->
+    <div class="timeline">
+
+      <!-- Memory 1 -->
+      <div class="timeline-item delay-1">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <!-- 📸 Replace emoji with <img src="memory1.jpg" ...> -->
+          <div class="timeline-photo">🌸</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">The First Hello</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            I still remember the moment I first saw you — a little nervous, a little magic in the air. That was the beginning of everything. 💫
+          </p>
+          <p class="font-script text-sm mt-2" style="color:var(--rose)">✦ Our very first day</p>
+        </div>
+      </div>
+
+      <!-- Memory 2 -->
+      <div class="timeline-item delay-2">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <!-- 📸 Replace emoji with <img src="memory2.jpg" ...> -->
+          <div class="timeline-photo">☕</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">Our First Coffee Date</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            The chai grew cold because we talked for hours. I knew then — you were someone truly special, unlike anyone I'd ever met.
+          </p>
+          <p class="font-script text-sm mt-2" style="color:var(--rose)">✦ When time stood still</p>
+        </div>
+      </div>
+
+      <!-- Memory 3 -->
+      <div class="timeline-item delay-3">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <!-- 📸 Replace with <img src="memory3.jpg" ...> -->
+          <div class="timeline-photo">🌅</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">That Perfect Evening</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            Walking side by side, the whole city just faded away. It was just you and me and the golden sky. I'd relive it a thousand times.
+          </p>
+          <p class="font-script text-sm mt-2" style="color:var(--rose)">✦ The golden hour, with you</p>
+        </div>
+      </div>
+
+      <!-- Memory 4 -->
+      <div class="timeline-item delay-4">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <!-- 📸 Replace with <img src="memory4.jpg" ...> -->
+          <div class="timeline-photo">🎂</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">Celebrations Together</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            Every little celebration became a hundred times more joyful with you in it. Your laughter is my favourite sound in the whole world.
+          </p>
+          <p class="font-script text-sm mt-2" style="color:var(--rose)">✦ Every moment, a gift</p>
+        </div>
+      </div>
+
+      <!-- Memory 5 -->
+      <div class="timeline-item delay-5">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <!-- 📸 Replace with <img src="memory5.jpg" ...> -->
+          <div class="timeline-photo">🌙</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">Late Night Conversations</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            Talking till midnight about everything and nothing — dreams, fears, silly things. That's when I fell even more in love with your beautiful mind.
+          </p>
+          <p class="font-script text-sm mt-2" style="color:var(--rose)">✦ Where hearts open freely</p>
+        </div>
+      </div>
+
+      <!-- Memory 6 -->
+      <div class="timeline-item delay-6">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <!-- 📸 Replace with <img src="memory6.jpg" ...> -->
+          <div class="timeline-photo">✈️</div>
+          <p class="font-script text-lg" style="color:var(--rosegold)">And So Many More...</p>
+          <p class="font-body text-base mt-1" style="color:#7b5060; line-height:1.65">
+            Every memory with you is a treasure I hold close. Here's to a lifetime of new adventures — always together, always us. 🌹
+          </p>
+          <p class="font-script text-sm mt-2" style="color:var(--rose)">✦ Forever and always</p>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="btn-next mt-4" onclick="goTo(3)">Next ❤️</button>
+
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  PAGE 3 · REASONS I LOVE YOU                     ║
+     ╚══════════════════════════════════════════════════╝ -->
+<section id="page3" class="page" aria-label="Reasons I love you">
+  <div class="page-inner gap-7 text-center">
+
+    <div>
+      <p class="font-script text-xl mb-1" style="color:var(--rosegold)">a little list from my heart</p>
+      <h2 class="font-display text-4xl" style="color:var(--burgundy); font-style:italic;">Why I Love You 💖</h2>
+    </div>
+
+    <div class="reasons-grid">
+      <!-- ✏️ Edit the icons and reasons freely! -->
+      <div class="reason-card delay-1">
+        <div class="reason-icon">😊</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Smile</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">It lights up every room and every corner of my heart.</p>
+      </div>
+      <div class="reason-card delay-2">
+        <div class="reason-icon">🌙</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Dreamy Eyes</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">I could get lost in them forever and never want to be found.</p>
+      </div>
+      <div class="reason-card delay-3">
+        <div class="reason-icon">💪</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Strength</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">The quiet, powerful way you handle everything with grace.</p>
+      </div>
+      <div class="reason-card delay-4">
+        <div class="reason-icon">🤣</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Laughter</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">Pure music. The best sound in the entire world, I promise.</p>
+      </div>
+      <div class="reason-card delay-5">
+        <div class="reason-icon">🌸</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Kindness</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">The way you care so deeply, so genuinely, for everyone around you.</p>
+      </div>
+      <div class="reason-card delay-6">
+        <div class="reason-icon">📚</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Mind</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">The ideas you have, the way you think — it endlessly fascinates me.</p>
+      </div>
+      <div class="reason-card delay-7">
+        <div class="reason-icon">🤗</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Your Warmth</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">Somehow you make every place feel safe and like home.</p>
+      </div>
+      <div class="reason-card delay-8">
+        <div class="reason-icon">✨</div>
+        <p class="font-display text-sm font-semibold" style="color:var(--burgundy)">Just Being You</p>
+        <p class="font-body text-sm mt-1" style="color:#9b6070">Everything about you — every quirk, every spark — I love it all.</p>
+      </div>
+    </div>
+
+    <button class="btn-next" onclick="goTo(4)">Next ❤️</button>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  PAGE 4 · LOVE LETTER                            ║
+     ╚══════════════════════════════════════════════════╝ -->
+<section id="page4" class="page" aria-label="Love letter">
+  <div class="page-inner gap-7 text-center">
+
+    <div>
+      <p class="font-script text-xl mb-1" style="color:var(--rosegold)">written from the deepest part of me</p>
+      <h2 class="font-display text-4xl" style="color:var(--burgundy); font-style:italic;">A Letter For You 💌</h2>
+    </div>
+
+    <div class="letter-paper">
+      <!-- ✏️ Edit this letter — make it even more personal! -->
+
+      <p class="font-script text-2xl mb-4" style="color:var(--rosegold)">My dearest Sandipa,</p>
+      <hr class="letter-line" />
+
+      <p class="font-body mt-5 text-lg leading-relaxed" style="color:#5a3040">
+        There are days when I look at you and I genuinely wonder how I got so lucky. You are not just the person I love — you are the person who made me understand what love truly means.
+      </p>
+
+      <p class="font-body mt-4 text-lg leading-relaxed" style="color:#5a3040">
+        Your laughter is my favourite thing in this world. The way your eyes light up when you talk about something that excites you — I could watch that forever. You have this quiet magic about you, Sandipa, the kind that makes ordinary moments feel extraordinary.
+      </p>
+
+      <p class="font-body mt-4 text-lg leading-relaxed" style="color:#5a3040">
+        I want you to know that every single time I am with you, I feel like the luckiest person alive. You make me want to be better — kinder, braver, more present. And I hope I make even a fraction of the difference in your life that you make in mine.
+      </p>
+
+      <p class="font-body mt-4 text-lg leading-relaxed" style="color:#5a3040">
+        On this birthday, I don't just want to celebrate the day you were born — I want to celebrate everything you are. Your kindness, your warmth, your fire, your gentleness. The whole beautiful, complicated, wonderful person that is you.
+      </p>
+
+      <p class="font-body mt-4 text-lg leading-relaxed" style="color:#5a3040">
+        Here's to you, my love. May this year bring you every joy you deserve — which is an enormous, overwhelming, limitless amount of joy. I promise to be right beside you, through every page of the story ahead.
+      </p>
+
+      <p class="font-body mt-4 text-lg leading-relaxed" style="color:#5a3040">
+        Happy Birthday, Sandipa. My heart is yours. 🌹
+      </p>
+
+      <div class="mt-6 text-right">
+        <hr class="letter-line" />
+        <p class="font-script text-2xl mt-3" style="color:var(--burgundy)">Forever yours,</p>
+        <p class="font-script text-3xl" style="color:var(--rosegold)">RAJ 💕</p>
+      </div>
+    </div>
+
+    <button class="btn-next" onclick="goTo(5)">Next ❤️</button>
+
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  PAGE 5 · MAKE A WISH  (THE GRAND FINALE 💕)     ║
+     ╚══════════════════════════════════════════════════╝ -->
+<section id="page5" class="page" aria-label="Make a wish">
+
+  <!-- Twinkling stars background -->
+  <div class="stars-container" id="stars-bg"></div>
+
+  <div class="page-inner gap-8 text-center relative z-10">
+
+    <div>
+      <p class="font-script text-2xl" style="color:var(--rosegold)">this one is just for you</p>
+      <h2 class="font-display leading-tight mt-2"
+          style="font-size:clamp(1.8rem,5.5vw,3.5rem); color:var(--burgundy); font-style:italic; text-shadow:0 0 40px rgba(197,130,106,.4)">
+        Sandipa, You Make<br/>My World Beautiful ✨
+      </h2>
+    </div>
+
+    <!-- WISH BUTTON — triggers confetti when clicked -->
+    <button class="wish-btn font-display" id="wish-btn" onclick="makeWish()">
+      Make a Wish Sandipa 💘
+    </button>
+
+    <!-- FINAL MESSAGE — revealed after confetti -->
+    <div id="final-message">
+      <div style="font-size: clamp(3rem, 10vw, 6rem);">🌹💕🌹</div>
+
+      <h3 class="font-display" style="font-size:clamp(2rem,7vw,4rem); color:var(--burgundy); font-style:italic;
+                 text-shadow:0 0 30px rgba(197,130,106,.5)">
+        I Love You,<br/>Sandipa 💗
+      </h3>
+
+      <p class="font-body text-xl max-w-md" style="color:#7b3050; line-height:1.9">
+        Every day with you is a gift I treasure. Today, tomorrow, and always — my heart belongs to you.
+        Happy Birthday, my love. 🥂
+      </p>
+
+      <p class="font-script text-2xl" style="color:var(--rosegold)">
+        — RAJ, forever &amp; always 💌
+      </p>
+
+      <button class="btn-restart font-display mt-4" onclick="restartJourney()">
+        ↩ Relive the Journey
+      </button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  JAVASCRIPT                                      ║
+     ╚══════════════════════════════════════════════════╝ -->
+<script>
+/* ─────────────────────────────────────────────────────
+   PAGE NAVIGATION
+───────────────────────────────────────────────────── */
+let currentPage = 1;
+const TOTAL = 5;
+
+function goTo(n) {
+  if (n < 1 || n > TOTAL) return;
+  const from = document.getElementById('page' + currentPage);
+  const to   = document.getElementById('page' + n);
+
+  from.classList.add('exit');
+  to.classList.add('active');
+
+  setTimeout(() => {
+    from.classList.remove('active', 'exit');
+  }, 650);
+
+  currentPage = n;
+  updateProgress();
+  triggerPageAnimations(n);
+
+  // Build stars on page 5
+  if (n === 5) buildStars();
+}
+
+function updateProgress() {
+  document.querySelectorAll('.prog-heart').forEach((h, i) => {
+    h.classList.toggle('done', i < currentPage);
+  });
+}
+
+function restartJourney() {
+  // Reset wish page
+  document.getElementById('wish-btn').style.display = 'inline-flex';
+  document.getElementById('final-message').style.display = 'none';
+  stopConfetti();
+  goTo(1);
+}
+
+/* ─────────────────────────────────────────────────────
+   PER-PAGE ANIMATIONS
+───────────────────────────────────────────────────── */
+function triggerPageAnimations(n) {
+  if (n === 2) {
+    setTimeout(() => {
+      document.querySelectorAll('.timeline-item').forEach(el => el.classList.add('visible'));
+    }, 200);
+  }
+  if (n === 3) {
+    document.querySelectorAll('.reason-card').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), 80 * i + 150);
+    });
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+   TWINKLING STARS (Page 5)
+───────────────────────────────────────────────────── */
+function buildStars() {
+  const container = document.getElementById('stars-bg');
+  if (container.childElementCount > 0) return; // already built
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${(Math.random()*3+1.5).toFixed(2)}s;
+      animation-delay:${(Math.random()*3).toFixed(2)}s;
+      width:${Math.random() < 0.3 ? 6 : 3}px;
+      height:${Math.random() < 0.3 ? 6 : 3}px;
+    `;
+    container.appendChild(s);
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+   MAKE A WISH — CONFETTI + PETAL EXPLOSION
+───────────────────────────────────────────────────── */
+const canvas  = document.getElementById('confetti-canvas');
+const ctx     = canvas.getContext('2d');
+let particles = [];
+let animId    = null;
+let running   = false;
+
+function makeWish() {
+  document.getElementById('wish-btn').style.display = 'none';
+  launchConfetti();
+  // Reveal final message after 3.5 s
+  setTimeout(() => {
+    document.getElementById('final-message').style.display = 'flex';
+    // Extra hearts burst
+    setTimeout(stopConfetti, 5000);
+  }, 3500);
+}
+
+function launchConfetti() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  particles = [];
+  running   = true;
+
+  // Create 300 particles (mix of confetti squares, hearts, petals)
+  for (let i = 0; i < 300; i++) spawnParticle();
+
+  animate();
+  // Keep spawning bursts
+  const interval = setInterval(() => {
+    if (!running) { clearInterval(interval); return; }
+    for (let i = 0; i < 40; i++) spawnParticle();
+  }, 600);
+}
+
+function spawnParticle() {
+  const types  = ['rect', 'heart', 'petal'];
+  const colors = [
+    '#f9d5e5','#e8a0b0','#c5826a','#d4a76a',
+    '#f4b8c8','#7b2d42','#fff0e8','#fce8d8',
+    '#ff8fab','#ff6b9d'
+  ];
+  particles.push({
+    x:    canvas.width  * Math.random(),
+    y:    -10,
+    vx:   (Math.random() - 0.5) * 4,
+    vy:   Math.random() * 4 + 2,
+    rot:  Math.random() * Math.PI * 2,
+    rotV: (Math.random() - 0.5) * 0.15,
+    size: Math.random() * 14 + 6,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    type:  types [Math.floor(Math.random() * types.length)],
+    alpha: 1,
+    life:  Math.random() * 200 + 120,
+    age:   0
+  });
+}
+
+function drawHeart(ctx, x, y, size) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.beginPath();
+  const s = size / 2;
+  ctx.moveTo(0, -s * 0.5);
+  ctx.bezierCurveTo( s,   -s * 1.3,  s * 2,  s * 0.3,  0,  s * 1.2);
+  ctx.bezierCurveTo(-s * 2, s * 0.3, -s,   -s * 1.3,  0, -s * 0.5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawPetal(ctx, x, y, size) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.beginPath();
+  ctx.ellipse(0, -size / 2, size * 0.35, size * 0.6, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  if (!running) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles = particles.filter(p => p.age < p.life && p.y < canvas.height + 30);
+
+  for (const p of particles) {
+    p.x   += p.vx;
+    p.y   += p.vy;
+    p.rot += p.rotV;
+    p.vy  += 0.06; // gravity
+    p.vx  += Math.sin(p.age * 0.05) * 0.03; // drift
+    p.age++;
+    p.alpha = p.age > p.life - 40 ? (p.life - p.age) / 40 : 1;
+
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle   = p.color;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+
+    if (p.type === 'rect') {
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    } else if (p.type === 'heart') {
+      drawHeart(ctx, 0, 0, p.size);
+    } else {
+      drawPetal(ctx, 0, 0, p.size);
+    }
+    ctx.restore();
+  }
+
+  ctx.globalAlpha = 1;
+  animId = requestAnimationFrame(animate);
+}
+
+function stopConfetti() {
+  running = false;
+  cancelAnimationFrame(animId);
+  // Fade out canvas
+  canvas.style.transition = 'opacity 1s';
+  canvas.style.opacity = '0';
+  setTimeout(() => {
+    canvas.style.display = 'none';
+    canvas.style.opacity = '1';
+    canvas.style.transition = '';
+  }, 1000);
+}
+
+/* ─────────────────────────────────────────────────────
+   FLOATING HEARTS / PETALS BACKGROUND PARTICLES
+───────────────────────────────────────────────────── */
+const bgCanvas = document.getElementById('particles-canvas');
+const bgCtx    = bgCanvas.getContext('2d');
+let bgParticles = [];
+
+function initBgCanvas() {
+  bgCanvas.width  = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+}
+
+function spawnBgParticle() {
+  const shapes = ['heart', 'petal', 'circle'];
+  const colors = ['rgba(249,213,229,0.6)','rgba(232,160,176,0.4)','rgba(244,184,200,0.5)','rgba(197,130,106,0.3)'];
+  bgParticles.push({
+    x:     Math.random() * bgCanvas.width,
+    y:     bgCanvas.height + 10,
+    size:  Math.random() * 14 + 5,
+    vx:    (Math.random() - 0.5) * 0.8,
+    vy:    -(Math.random() * 0.8 + 0.3),
+    rot:   Math.random() * Math.PI * 2,
+    rotV:  (Math.random() - 0.5) * 0.02,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    shape: shapes[Math.floor(Math.random() * shapes.length)],
+    alpha: Math.random() * 0.5 + 0.2
+  });
+}
+
+function animateBg() {
+  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+  bgParticles = bgParticles.filter(p => p.y > -p.size);
+
+  for (const p of bgParticles) {
+    p.x   += p.vx + Math.sin(Date.now() * 0.001 + p.y * 0.01) * 0.2;
+    p.y   += p.vy;
+    p.rot += p.rotV;
+
+    bgCtx.globalAlpha = p.alpha;
+    bgCtx.fillStyle   = p.color;
+    bgCtx.save();
+    bgCtx.translate(p.x, p.y);
+    bgCtx.rotate(p.rot);
+
+    if (p.shape === 'heart') {
+      drawHeart(bgCtx, 0, 0, p.size);
+    } else if (p.shape === 'petal') {
+      drawPetal(bgCtx, 0, 0, p.size);
+    } else {
+      bgCtx.beginPath();
+      bgCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+      bgCtx.fill();
+    }
+    bgCtx.restore();
+  }
+  bgCtx.globalAlpha = 1;
+
+  // Spawn new ones at intervals
+  if (Math.random() < 0.08) spawnBgParticle();
+
+  requestAnimationFrame(animateBg);
+}
+
+initBgCanvas();
+// Pre-seed particles
+for (let i = 0; i < 25; i++) {
+  spawnBgParticle();
+  bgParticles[bgParticles.length - 1].y = Math.random() * bgCanvas.height;
+}
+animateBg();
+
+window.addEventListener('resize', () => {
+  initBgCanvas();
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+/* ─────────────────────────────────────────────────────
+   MUSIC TOGGLE
+   🎵 Add a romantic MP3 src to the <audio> tag above
+───────────────────────────────────────────────────── */
+let musicOn = false;
+const music = document.getElementById('bg-music');
+function toggleMusic() {
+  if (musicOn) {
+    music.pause();
+    document.getElementById('music-btn').textContent = '🎵';
+    musicOn = false;
+  } else {
+    music.play().catch(() => {});
+    document.getElementById('music-btn').textContent = '🔇';
+    musicOn = true;
+  }
+}
+</script>
+</body>
+</html>
